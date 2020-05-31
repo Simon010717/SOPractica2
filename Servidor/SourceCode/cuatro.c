@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-//#include <ncurses.h>
+#include <ncurses.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>

@@ -1,8 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<strings.h>
-#include<string.h>
-//#include <ncurses.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <string.h>
+#include <ncurses.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -28,15 +28,15 @@ int eliminarRegistro(int clientfd){
 
     r = recv(clientfd,(void*)&total,sizeof(int),0);
 
-    printf("Existen %i registros.\n",total);              // Impresion del numero de registros
-    printf("ID de estructura que desea eliminar: ");      // Impresion mensaje
-    scanf("%i",&id);                                      // Lectura del id del registro a eliminare.
+    printw("Existen %i registros.\n",total);              // Impresion del numero de registros
+    printw("ID de estructura que desea eliminar: ");      // Impresion mensaje
+    scanw("%i",&id);                                      // Lectura del id del registro a eliminare.
 
     r = send(clientfd,(void*)&id,sizeof(int),0);
 
     r = recv(clientfd,(void*)&f,sizeof(int),0);
     if(!f) {                                              // Evalua
-        printf("No existe un registro con ese ID\n");     // Si f es 0 (queriendo decir que no encontro un paquete con ese id), imprime el mensaje
+        printw("No existe un registro con ese ID\n");     // Si f es 0 (queriendo decir que no encontro un paquete con ese id), imprime el mensaje
         return 0;                                         // Termina la funcion
     }
     return 0;

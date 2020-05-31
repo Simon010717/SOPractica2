@@ -31,7 +31,7 @@ struct sockaddr_in {
 
 /*
 void interrumpido(){
-    printf("señal interrumpida");
+    printw("señal interrumpida");
     close(serverfd);
 }*/
 
@@ -48,8 +48,8 @@ void* client_manager(void* ar){
     int i = args->i;
     int clientfd = args->clientfd;
     char* ip = args->ip;
-    //printf("client %i %s",args->clientfd,args->ip);
-    //printf("client %i %s",clientfd,ip);
+    //printw("client %i %s",args->clientfd,args->ip);
+    //printw("client %i %s",clientfd,ip);
     /*fp = fopen("client_manager","a");
     fwrite(men,strlen(men),1,fp);
     fwrite(buf,19,1,fp);
@@ -67,24 +67,20 @@ void* client_manager(void* ar){
         switch (opcion)
         {
         case 1:
-            printf("opcion received %i", opcion);
             q = ingresarRegistro(clientfd,ip); // Ejecuta la función de Ingreso que se encuentra en SourceCode/uno.c
             r = send(clientfd, (void *)&q, sizeof(int), 0);
             break;
 
         case 2:
-            printf("opcion received %i", opcion);
             verRegistro(clientfd,ip); // Ejecuta la función de verRegistro que se encuentra en SourceCode/dos.c
             break;
 
         case 3:
-            printf("opcion received %i", opcion);
             q = eliminarRegistro(clientfd,ip); // Ejecuta la función de eliminarRegistro que se encuentra en SourceCode/tres.c
             r = send(clientfd, (void *)&q, sizeof(int), 0);
             break;
 
         case 4:
-            printf("opcion received %i", opcion);
             buscarRegistro(clientfd,ip); // Ejecuta la función de verRegistro que se encuentra en SourceCode/dos.c
             break;
 
@@ -138,8 +134,6 @@ int main()
     pthread_t tid[32];
     int i=0;
 
-    //fclose(fopen("nada","w+"));
-
     while(1){
         clientfd[i] = accept(serverfd,(struct sockaddr*)&clients[i],&tamano);
         if (clientfd[i] < 0)
@@ -147,8 +141,6 @@ int main()
             perror(" error accept() server: ");
             exit(-1);
         }
-
-        //fclose(fopen("cero","w+"));
     
         ip = inet_ntoa(clients[i].sin_addr);
     
@@ -158,8 +150,6 @@ int main()
         args->i=i;
         args->clientfd = clientfd[i];
         sprintf(args->ip,"%s",ip);
-
-        //printf("client %i %s",args->clientfd,args->ip);
 
         if(pthread_create(&tid[i],NULL,client_manager,args) != 0){
             perror(" error thread no creado ");

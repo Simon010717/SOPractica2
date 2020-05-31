@@ -2,11 +2,11 @@
 #include<stdlib.h>
 #include<strings.h>
 #include<string.h>
-//#include <ncurses.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <ncurses.h>
 #include <arpa/inet.h>
 #include <strings.h>
 #include <unistd.h>

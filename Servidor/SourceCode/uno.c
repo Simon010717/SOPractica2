@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <strings.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include <signal.h>
 #include <pthread.h>
 #include <time.h>
@@ -46,7 +47,7 @@ int ingresarRegistro(int clientfd, char* ip)
    data = malloc(sizeof(struct dogType)); // Reserva del espacio de memoria de la estuctura dogType
 
    r = recv(clientfd, (void *)data, sizeof(struct dogType), 0); // Llamada a la funcion que cargara la informacion ingresada al apuntador data
-   printf("recieved");
+   printw("recieved");
    hash = hashf(data->nombre, 32); // Llamada a la funcion hashf obteniendo el coidgo hash del nombre ingresado, que se encuentra en SourceCode/general.c
 
    char *dir;                // Arreglo de caracteres que contendra la direccion del archivo de la tabla hash donde se debera ingresar los datos

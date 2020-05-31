@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <ncurses.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -9,6 +8,7 @@
 #include <arpa/inet.h>
 #include <strings.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include <signal.h>
 #include "general.h"
 
@@ -28,16 +28,16 @@ int verRegistro(int clientfd)
 
     r = recv(clientfd, (void *)&size, sizeof(int), 0);
 
-    printf("Número de registros actuales: %i\nIngrese ID: ", size); // Impresion del numero de registros actuales y solicitud de ingreso del id del registro que se desea ver.
+    printw("Número de registros actuales: %i\nIngrese ID: ", size); // Impresion del numero de registros actuales y solicitud de ingreso del id del registro que se desea ver.
 
-    scanf("%i", &id); // Lectura del id del registro que se desea ver.
+    scanw("%i", &id); // Lectura del id del registro que se desea ver.
 
     r = send(clientfd, (void *)&id, sizeof(int), 0);
 
     r = recv(clientfd, (void *)&v, sizeof(int), 0);
     if (!v)
     {                                                   // Si el id no fue encontrado
-        printf("\nNo existe registro con ID %i\n", id); // Se informa al usuario
+        printw("\nNo existe registro con ID %i\n", id); // Se informa al usuario
         return -1;                                      // La función retorna -1 (no exitoso)
     }
 
@@ -45,14 +45,14 @@ int verRegistro(int clientfd)
     data = malloc(sizeof(struct dogType)); // Reserva del espacio de memora de la estructura dogType
 
     r = recv(clientfd, (void *)data, sizeof(struct dogType), 0); // Lectura del id y almacenamiento de este en la variable temporal tid.
-    printf("\n\nRegistro  con el ID: %i\n", data->id);
-    printf("Nombre: %s\n", data->nombre);
-    printf("Tipo: %s\n", data->tipo);
-    printf("Edad: %i\n", data->edad);
-    printf("Raza: %s\n", data->raza);
-    printf("Estatura: %i\n", data->estatura);
-    printf("Peso: %f\n", data->peso);
-    printf("Sexo: %c\n", data->sexo);
+    printw("\n\nRegistro  con el ID: %i\n", data->id);
+    printw("Nombre: %s\n", data->nombre);
+    printw("Tipo: %s\n", data->tipo);
+    printw("Edad: %i\n", data->edad);
+    printw("Raza: %s\n", data->raza);
+    printw("Estatura: %i\n", data->estatura);
+    printw("Peso: %f\n", data->peso);
+    printw("Sexo: %c\n", data->sexo);
 
     char *dir;                   // Arreglo de caracteres que contendra la direccion del archivo de historia clinica.
     dir = malloc(15);            // Reserva del espacio de memoria para la direccion.

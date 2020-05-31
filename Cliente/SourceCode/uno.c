@@ -27,21 +27,21 @@
 int loadStruct(void *ap){
    struct dogType *data;                                                      // Declaracion de la estructura sobre el apuntador parametro
    data = ap;
-   printf("Nombre: ");                                                        // Lectura de cada dato y almacenamiento sobre la estructura declarada
+   printw("Nombre: ");                                                        // Lectura de cada dato y almacenamiento sobre la estructura declarada
    bzero(data->nombre,32);
-   scanf(" %s", data->nombre);
-   printf("Tipo: ");
-   scanf(" %s", data->tipo);
-   printf("Edad: ");
-   scanf(" %i", &data->edad);
-   printf("Raza: ");
-   scanf(" %s", data->raza);
-   printf("Estatura: ");
-   scanf(" %i", &data->estatura);
-   printf("Peso: ");
-   scanf(" %f", &data->peso);
-   printf("Sexo: ");
-   scanf(" %c", &data->sexo);
+   scanw(" %s", data->nombre);
+   printw("Tipo: ");
+   scanw(" %s", data->tipo);
+   printw("Edad: ");
+   scanw(" %i", &data->edad);
+   printw("Raza: ");
+   scanw(" %s", data->raza);
+   printw("Estatura: ");
+   scanw(" %i", &data->estatura);
+   printw("Peso: ");
+   scanw(" %f", &data->peso);
+   printw("Sexo: ");
+   scanw(" %c", &data->sexo);
 
    return 0;
 }
@@ -68,6 +68,6 @@ int ingresarRegistro(int clientfd){
    r = loadStruct(data);             // Llamada a la funcion que cargara la informacion ingresada al apuntador data
    r = send(clientfd, (void*)data, sizeof(struct dogType), 0);
    r = recv(clientfd, (void *)&id, sizeof(int),0);
-   printf("ID: %i. ",id);                                                  // Impresion del ID con el que se guardo la informacion ingresado
+   printw("ID: %i. ",id);                                                  // Impresion del ID con el que se guardo la informacion ingresado
    return 0;
 }

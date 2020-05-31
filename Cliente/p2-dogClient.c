@@ -11,6 +11,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <strings.h>
+#include <ncurses.h>
 #include "general.h"
 #include "uno.h"
 #include "dos.h"
@@ -18,15 +19,15 @@
 #include "cuatro.h"
 
 #define PORT 3535
-/*
+
 void keyToContinue()
 {                                                          // Funcion que espera a que el usario presione cualquier tecla para continuar
-    printf("\nPulse cualquier tecla para continuar...\n"); // Imprime el mensaje
+    printw("\nPulse cualquier tecla para continuar...\n"); // Imprime el mensaje
     noecho();                                              // Impide que se muestre el caracter en consola.
     getch();                                               // Espera y obtiene el caracter.
     echo();                                                // Permite de nuevo el ingreso de caracteres.
     clear();                                               // Limpia la consola
-}*/
+}
 
 int main(int argc, char *argv[])
 {
@@ -53,27 +54,28 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
-    int w = 1;/*
+    int w = 1;
+    
     initscr(); // Se incia la consola
     clear();   // Se limpia la consola
     refresh(); // Se actualiza la consola
-    */
+    
     while (w)
     { //Ciclo continuo del menú
 
         int opcion, r; // Declaracion de las variables
 
-        printf("------------Veterinaria Juano's------------\n\n"); // Impresion del menú
-        printf("Opciones: \n");
-        printf("    1. Ingresar Registro\n");
-        printf("    2. Ver Registro\n");
-        printf("    3. Eliminar Registro\n");
-        printf("    4. Buscar Registro\n");
-        printf("    5. Salir\n");
-        printf("\n\n");
-        printf("Digite su opción: ");
+        printw("------------Veterinaria Juano's------------\n\n"); // Impresion del menú
+        printw("Opciones: \n");
+        printw("    1. Ingresar Registro\n");
+        printw("    2. Ver Registro\n");
+        printw("    3. Eliminar Registro\n");
+        printw("    4. Buscar Registro\n");
+        printw("    5. Salir\n");
+        printw("\n\n");
+        printw("Digite su opción: ");
 
-        scanf("%i", &opcion); // Lee la opcion ingresada
+        scanw("%i", &opcion); // Lee la opcion ingresada
         r = send(clientfd,(void*)&opcion, sizeof(int),0);
         if(r<0){
             perror("error send client");
@@ -88,11 +90,11 @@ int main(int argc, char *argv[])
 
             if (q != 0)
             {
-                printf("Registro fallido.\n");
+                printw("Registro fallido.\n");
             }
             else
             {
-                printf("Registro exitoso.\n");
+                printw("Registro exitoso.\n");
             }
             break;
 
@@ -103,7 +105,7 @@ int main(int argc, char *argv[])
         case 3:
             eliminarRegistro(clientfd); // Ejecuta la función de eliminarRegistro que se encuentra en SourceCode/tres.c
             r = recv(clientfd, (void*)&q, sizeof(int), 0);
-            if(q) printf("Registro eliminado exitosamente\n"); 
+            if(q) printw("Registro eliminado exitosamente\n"); 
             break;
 
         case 4:
@@ -111,18 +113,18 @@ int main(int argc, char *argv[])
             break;
 
         case 5:
-            printf("Gracias.\n"); //Imprime gracias y termina el programa.
+            printw("Gracias.\n"); //Imprime gracias y termina el programa.
             w = 0;
             break;
 
         default:
-            printf("Opcion invalida.\n"); //Imprime el mensaje.
+            printw("Opcion invalida.\n"); //Imprime el mensaje.
         }
 
-        //keyToContinue();
+        keyToContinue();
     }
-    //clear();
-    //endwin();
-    //close(clientfd);
+    clear();
+    endwin();
+    close(clientfd);
     return 0;
 }
