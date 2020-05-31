@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <strings.h>
 #include "general.h"
 #include "uno.h"
 #include "dos.h"
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
 {
     int clientfd, r, q;
     struct sockaddr_in client;
-    struct hostent *he;
+    //struct hostent *he;
 
     clientfd = socket(AF_INET, SOCK_STREAM, 0);
     if (clientfd < 0)
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
     client.sin_port = htons(PORT);
 
     inet_aton(argv[1], &client.sin_addr);
+    bzero(client.sin_zero, 8);
 
     r = connect(clientfd, (struct sockaddr *)&client, (socklen_t)sizeof(struct sockaddr));
     if (r < 0)
@@ -73,6 +75,10 @@ int main(int argc, char *argv[])
 
         scanf("%i", &opcion); // Lee la opcion ingresada
         r = send(clientfd,(void*)&opcion, sizeof(int),0);
+        if(r<0){
+            perror("error send client");
+            exit(-1);
+        }
         switch (opcion) // Seleccion de la funcion según la opcion ingresada
         {
         case 1:
