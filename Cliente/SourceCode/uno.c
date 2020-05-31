@@ -65,9 +65,9 @@ int ingresarRegistro(int clientfd){
    struct dogType *data;                                                     // Declaracion del apuntador a una estructura dogType donde se guardara la informacion ingresada
    data = malloc(sizeof(struct dogType));                                    // Reserva del espacio de memoria de la estuctura dogType
    
-   r = loadStruct(data);
-   //clear();                                                   // Llamada a la funcion que cargara la informacion ingresada al apuntador data                                                        // Apertura del archivo dataDogs.dat con argumento "a" para esciribr al final del fichero
+   r = loadStruct(data);             // Llamada a la funcion que cargara la informacion ingresada al apuntador data                                                        // Apertura del archivo dataDogs.dat con argumento "a" para esciribr al final del fichero
    r = send(clientfd, (void*)data, sizeof(struct dogType), 0);
+   printf("sent");
    r = recv(clientfd, (void *)&id, sizeof(int),0);
    printf("ID: %i. ",id);                                                    // Impresion del ID con el que se guardo la informacion ingresada
       

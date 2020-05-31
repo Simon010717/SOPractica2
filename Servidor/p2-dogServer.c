@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <pthread.h>
+#include <string.h>
 #include "general.h"
 #include "uno.h"
 #include "dos.h"
@@ -27,18 +28,68 @@ struct sockaddr_in {
 };
 */
 
-int serverfd;
+
 /*
 void interrumpido(){
     printf("señal interrumpida");
     close(serverfd);
 }*/
 
+struct arguments{
+    int clientfd;
+    char ip[10];
+};
+
+void* client_manager(void* ar){
+    struct arguments *args;
+    args = malloc(sizeof(struct arguments));
+
+    args = ar; 
+
+    int clientfd = args->clientfd;
+    char* ip = args->ip;
+
+    int r,opcion,q,w = 1;
+
+    while (w) {
+
+        r = recv(clientfd, (void *)&opcion, sizeof(int), 0);
+        //printf("opcion recieved %i", opcion);
+        switch (opcion)
+        {
+        case 1:
+            q = ingresarRegistro(clientfd,ip); // Ejecuta la función de Ingreso que se encuentra en SourceCode/uno.c
+            r = send(clientfd, (void *)&q, sizeof(int), 0);
+            break;
+
+        case 2:
+            verRegistro(clientfd,ip); // Ejecuta la función de verRegistro que se encuentra en SourceCode/dos.c
+            break;
+
+        case 3:
+            q = eliminarRegistro(clientfd,ip); // Ejecuta la función de eliminarRegistro que se encuentra en SourceCode/tres.c
+            r = send(clientfd, (void *)&q, sizeof(int), 0);
+            break;
+
+        case 4:
+            buscarRegistro(clientfd,ip); // Ejecuta la función de verRegistro que se encuentra en SourceCode/dos.c
+            break;
+
+        case 5:
+            w = 0;
+            close(clientfd);
+            //close(serverfd);
+            break;
+        }
+    }
+}
+
 int main()
 {
     //signal(SIGINT, interrumpido);
 
-    int clientfd, r, q, opcion, opt = 1;
+    int clientfd, serverfd, r, q, opcion, opt = 1;
+    char *ip;
     struct sockaddr_in server, client;
     socklen_t tamano;
 
@@ -70,55 +121,65 @@ int main()
         exit(-1);
     }
 
-    clientfd = accept(serverfd, (struct sockaddr *)&client, &tamano);
-    if (clientfd < 0)
-    {
-        perror("\n-->error accept() server: ");
-        exit(-1);
-    }
+    pthread_t tid[32];
+    int i=0;
 
-    char* ip;
-    ip = inet_ntoa(client.sin_addr);
+    fclose(fopen("nada","w+"));
 
-    int w = 1;
-
-    while (w) {
-
-        r = recv(clientfd, (void *)&opcion, sizeof(int), 0);
-        //printf("opcion recieved %i", opcion);
-        switch (opcion)
+    while(1){
+        clientfd = accept(serverfd,(struct sockaddr*)&client,&tamano);
+        if (clientfd < 0)
         {
-        case 1:
-            q = ingresarRegistro(clientfd,ip); // Ejecuta la función de Ingreso que se encuentra en SourceCode/uno.c
-            r = send(clientfd, (void *)&q, sizeof(int), 0);
-            break;
-
-        case 2:
-            verRegistro(clientfd,ip); // Ejecuta la función de verRegistro que se encuentra en SourceCode/dos.c
-            break;
-
-        case 3:
-            q = eliminarRegistro(clientfd,ip); // Ejecuta la función de eliminarRegistro que se encuentra en SourceCode/tres.c
-            r = send(clientfd, (void *)&q, sizeof(int), 0);
-            break;
-
-        case 4:
-            buscarRegistro(clientfd,ip); // Ejecuta la función de verRegistro que se encuentra en SourceCode/dos.c
-            break;
-
-        case 5:
-            w = 0;
-            close(clientfd);
-            close(serverfd);
-            break;
+            perror(" error accept() server: ");
+            exit(-1);
         }
-    }
 
-    //r = send(clientfd, "hola mundo", 10, 0);
-    /*if (r < 0)
-    {
-        perror("\n-->Error en send(): ");
-        exit(-1);
-    }*/
+        fclose(fopen("cero","w+"));
     
+        ip = inet_ntoa(client.sin_addr);
+    
+        struct arguments *args;
+        args = malloc(sizeof(struct arguments));
+
+        args->clientfd = clientfd;
+        sprintf(args->ip,"%s",ip);
+
+        fclose(fopen("uno","w+"));
+
+        if(pthread_create(&tid[i],NULL,client_manager,&args) < 0){
+            perror(" error thread no creado ");
+            return 1;
+        }
+
+        fclose(fopen("dos","w+"));
+
+        if(i>=32){
+            i = 0;
+            while(i<32){
+                pthread_join(tid[i++],NULL);
+            }
+        }
+        i++;
+    }
+/*
+    while(clientfd=accept(serverfd,(struct sockaddr*)&client,&tamano)){
+        pthread_t sniffer_thread;
+        char* ip;
+        ip = inet_ntoa(client.sin_addr);
+        void *args;
+        args = malloc()
+    
+        if( pthread_create( &sniffer_thread,NULL,client_manager,(void*) newclientfd) < 0)
+        {
+            perror("errror thread no creado");
+            return 1;
+        }
+
+        clientfd = accept(serverfd, (struct sockaddr *)&client, &tamano);
+        if (clientfd < 0)
+        {
+            perror("\n-->error accept() server: ");
+            exit(-1);
+        }
+    }*/
 }
