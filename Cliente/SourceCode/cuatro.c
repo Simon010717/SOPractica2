@@ -26,20 +26,25 @@
    -------------------------------------------------------------------/*/
 
 int buscarRegistro(int clientfd){
-    int hash,size,tid,l,i,r;                                   // Declaracion de variables enteras
-    char nombre[32];                                         // Declaracion del arreglo de caracteres del nombre buscado 
-    bzero(nombre,32);                     // Limpieza del espacio en memoria 
-    printw("Ingrese nombre a buscar: ");                     // Solicitud de ingreso de nombre 
-    scanw("%s",nombre);                                      // Lectura del nombre ingresado
+    int hash,size,tid,l,i,r; // Declaracion de variables enteras
+    char nombre[32]; // Declaracion del arreglo de caracteres del nombre buscado 
+    bzero(nombre,32); // Limpieza del espacio en memoria 
+    printw("Ingrese nombre a buscar: "); // Solicitud de ingreso de nombre 
+    scanw("%s",nombre); // Lectura del nombre ingresado
 
-    r = send(clientfd,(void*)nombre, 32, 0);
+    r = send(clientfd,(void*)nombre, 32, 0); // envío del nombre a buscar.
+    if (r < 32)
+    {
+        perror("\n-->error send() server: "); //Verificación de error al enviar el nombre a buscar.
+        exit(-1);
+    }
 
-    printw("ID de registros con nombre \"%s\":\n",nombre);   // Impresion de mensaje
+    printw("ID de registros con nombre \"%s\":\n",nombre); // Impresion de mensaje
 
-    while(1){                              // Iteracion sobre paquetes en el archivo hash. Todos los archivos con el mismo nombre se encuentran en el mismo archivo hash, pero dos nombres diferentes pueden tener el mismo codigo hash
-        r = recv(clientfd,(void*)&tid,sizeof(int),0);
+    while(1){ // Iteracion sobre paquetes en el archivo hash. Todos los archivos con el mismo nombre se encuentran en el mismo archivo hash, pero dos nombres diferentes pueden tener el mismo codigo hash
+        r = recv(clientfd,(void*)&tid,sizeof(int),0); // recepción del id temporal
         if(tid<0) break;
-        printw("- %i ",tid);                             // Si coinciden imprime el id leido 
+        printw("- %i ",tid); // Si coinciden imprime el id leido 
     }
     printw("\n");
     return 0;
