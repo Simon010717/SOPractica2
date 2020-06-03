@@ -55,7 +55,6 @@ int ingresarRegistro(int clientfd, char* ip)
         perror("\n-->error recv() struct: "); //Verificación de error al recibir data del cliente.
         exit(-1);
     }
-   printw("received"); // imprime la cadena "received".
    hash = hashf(data->nombre, 32); // Llamada a la funcion hashf obteniendo el coidgo hash del nombre ingresado, que se encuentra en SourceCode/general.c
 
    char *dir; // Arreglo de caracteres que contendra la direccion del archivo de la tabla hash donde se debera ingresar los datos

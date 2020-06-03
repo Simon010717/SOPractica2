@@ -80,5 +80,7 @@ int ingresarRegistro(int clientfd){
       exit(-1);
    }
    printw("ID: %i. ",id); // Impresion del ID con el que se guardo la informacion ingresado
+
+   free(data); // Liberacion de la memoria reservada en data (estructura donde se guardaron los datos)
    return 0;
 }
