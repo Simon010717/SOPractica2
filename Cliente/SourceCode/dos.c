@@ -41,11 +41,16 @@ int verRegistro(int clientfd)
     r = send(clientfd, (void *)&id, sizeof(int), 0); // envío del id al servidor.
     if (r <  sizeof(int))
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar el id al servidor.
+        perror("\n-->error send() id: "); //Verificación de error al enviar el id al servidor.
         exit(-1);
     }
 
     r = recv(clientfd, (void *)&v, sizeof(int), 0); // recibe v, enviada por el servidor.
+    if (r <  sizeof(int))
+    {
+        perror("\n-->error recv() v: "); //Verificación de error al enviar el id al servidor.
+        exit(-1);
+    }
     if (!v)
     { // Si el id no fue encontrado
         printw("\nNo existe registro con ID %i\n", id); // Se informa al usuario
@@ -56,6 +61,11 @@ int verRegistro(int clientfd)
     data = malloc(sizeof(struct dogType)); // Reserva del espacio de memora de la estructura dogType
 
     r = recv(clientfd, (void *)data, sizeof(struct dogType), 0); //recepción de la estructura enviada por el servidor.
+    if (r <  sizeof(struct dogType))
+    {
+        perror("\n-->error recv() struct: "); //Verificación de error al enviar el id al servidor.
+        exit(-1);
+    }
     printw("\n\nRegistro  con el ID: %i\n", data->id); // impresión de los datos de la estructura.
     printw("Nombre: %s\n", data->nombre);
     printw("Tipo: %s\n", data->tipo);
@@ -76,7 +86,7 @@ int verRegistro(int clientfd)
     r = recv(clientfd,(void*)&size,sizeof(int),0); // recepción del tamaño de la historia enviada por el servidor.
     if (r <  sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir la historia enviada por el servidor.
+        perror("\n-->error recv() size: "); //Verificación de error al recibir la historia enviada por el servidor.
     }
     if(size>0){// si la historia tiene tamaño mayor a cero, se envía al cliente.
         char* buff;// Variable con el contenido del archivo.
@@ -85,7 +95,7 @@ int verRegistro(int clientfd)
         r = recv(clientfd,buff,size,0); // recepcion del contenido de la historia enviada por el servidor.
         if (r < size)
         {
-            perror("\n-->error recv() server: "); //Verificación de error al recibir la historia enviada por el servidor.
+            perror("\n-->error recv() historia: "); //Verificación de error al recibir la historia enviada por el servidor.
             exit(-1);
         }
         fwrite(buff,size,1,fp); // escribe el contenido de la historia editada por el cliente en el archivo de historia clinica.
@@ -107,9 +117,9 @@ int verRegistro(int clientfd)
     fclose(fp); // Cierre del archivo.
     
     r = send(clientfd,(void*)&size,sizeof(int),0); // envío del tamaño de la historia al servidor.
-    if (r < size)
+    if (r < sizeof(int))
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar el tamaño de la historia al servidor.
+        perror("\n-->error send() size: "); //Verificación de error al enviar el tamaño de la historia al servidor.
         exit(-1);
     }
     if(size>0){
@@ -122,7 +132,7 @@ int verRegistro(int clientfd)
         r = send(clientfd,buff,size,0); // envío del contenido de la historia al servidor.
         if (r < size)
         {
-            perror("\n-->error send() server: "); //Verificación de error al enviar el contenido de la historia al servidor.
+            perror("\n-->error send() historia: "); //Verificación de error al enviar el contenido de la historia al servidor.
             exit(-1);
         }
         free(buff); // se libera la memoria reservada para buff.

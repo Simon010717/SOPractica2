@@ -116,6 +116,11 @@ int verRegistro(int clientfd, char* ip)
 
     v = verificacion(id); // Llamada a la función verificacion.
     r = send(clientfd, (void *)&v, sizeof(int), 0);
+    if (r < sizeof(int))
+    {
+        perror("\n-->error send() v: "); //Verificación de error al recibir el id enviado por el cliente.
+        exit(-1);
+    }
     if(!v) return -1; // verificación del error al enviar la respuesta de ejecutar la función verificación.
     
     fp = fopen("./dataDogs.dat", "r"); // Apertura del archivo dataDogs.dat "r" (para lectura)
@@ -139,7 +144,7 @@ int verRegistro(int clientfd, char* ip)
             r = send(clientfd, (void *)data, sizeof(struct dogType), 0); // envío de la estructura data al cliente.
             if (r <  sizeof(struct dogType))
             {
-                perror("\n-->error send() server: "); //Verificación de error al enviar data al cliente.
+                perror("\n-->error send() struct: "); //Verificación de error al enviar data al cliente.
                 exit(-1);
             }
             break;
@@ -164,9 +169,9 @@ int verRegistro(int clientfd, char* ip)
     fclose(fp); // Cierre del archivo.
 
     r = send(clientfd,(void*)&size,sizeof(int),0); // envío del tamaño del archivo al cliente.
-    if (r <  sizeof(struct dogType))
+    if (r <  sizeof(int))
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar el tamaño del archivo al cliente.
+        perror("\n-->error send() size: "); //Verificación de error al enviar el tamaño del archivo al cliente.
         exit(-1);
     }
     if(size>0){ // si la historia tiene tamaño mayor a cero, se envía al cliente.
@@ -179,7 +184,7 @@ int verRegistro(int clientfd, char* ip)
         r = send(clientfd,buff,size,0); // Se envía el buffer que contiene la historia, al cliente.
         if (r <  size)
         {
-            perror("\n-->error send() server: "); //Verificación de error al enviar la historia, al cliente.
+            perror("\n error send() historia: "); //Verificación de error al enviar la historia, al cliente.
             exit(-1);
         }
         free(buff); // se libera el buffer.
@@ -190,7 +195,7 @@ int verRegistro(int clientfd, char* ip)
     r = recv(clientfd,(void*)&size,sizeof(int),0); // recibe el tamañp de la historia editada por el cliente.
     if (r <  sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir el tamaño de la historia editada por cliente.
+        perror("\n-->error recv() size: "); //Verificación de error al recibir el tamaño de la historia editada por cliente.
         exit(-1);
     }
     if(size>0){ // si la historia tiene tamaño mayor a cero, se envía al cliente.
@@ -200,7 +205,7 @@ int verRegistro(int clientfd, char* ip)
         r = recv(clientfd,buff,size,0); // recibe el buffer (contenido de la historia) enviado por el cliente.
         if (r <  size)
         {
-            perror("\n-->error recv() server: "); //Verificación de error al recibir el buffer (contenido de la historia) enviado por el cliente.
+            perror("\n-->error recv() historia: "); //Verificación de error al recibir el buffer (contenido de la historia) enviado por el cliente.
             exit(-1);
         }
         fwrite(buff,size,1,fp); // escribe el contenido de la historia editada por el cliente en el archivo de historia clinica.
