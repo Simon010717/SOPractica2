@@ -30,7 +30,7 @@ int eliminarRegistro(int clientfd){
     r = recv(clientfd,(void*)&total,sizeof(int),0); // recepción del total de registros enviado por el servidor.
     if (r < sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir el total de registros enviado por el servidor.
+        perror("\n-->error recv() total: "); //Verificación de error al recibir el total de registros enviado por el servidor.
         exit(-1);
     }
 
@@ -42,11 +42,16 @@ int eliminarRegistro(int clientfd){
     r = send(clientfd,(void*)&id,sizeof(int),0);
     if (r < sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir el total de registros enviado por el servidor.
+        perror("\n-->error send() id: "); //Verificación de error al recibir el total de registros enviado por el servidor.
         exit(-1);
     }
 
     r = recv(clientfd,(void*)&f,sizeof(int),0); // recepción de si se encontró el registro buscado.
+    if (r < sizeof(int))
+    {
+        perror("\n-->error recv() f: "); //Verificación de error al recibir el total de registros enviado por el servidor.
+        exit(-1);
+    }
     if(!f) {                                              // Evalua
         printw("No existe un registro con ese ID\n");     // Si f es 0 (queriendo decir que no encontro un paquete con ese id), imprime el mensaje
         return 0;                                         // Termina la funcion

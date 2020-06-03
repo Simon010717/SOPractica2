@@ -50,7 +50,7 @@ int buscarRegistro(int clientfd, char* ip){
     r = recv(clientfd,(void*)nombre, 32, 0); // Lectura del nombre ingresado
     if (r < 32)
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir nombre.
+        perror("\n-->error recv() nombre: "); //Verificación de error al recibir nombre.
         exit(-1);
     }
 
@@ -82,7 +82,7 @@ int buscarRegistro(int clientfd, char* ip){
            r = send(clientfd,(void*)&tid,sizeof(int),0); // Envío del id temporal al cliente.
            if (r < sizeof(int))
             {
-                perror("\n-->error send() server: "); //Verificación de error al enviar el id.
+                perror("\n-->error send() tid: "); //Verificación de error al enviar el id.
                 exit(-1);
             }
         }
@@ -92,7 +92,7 @@ int buscarRegistro(int clientfd, char* ip){
     r = send(clientfd,(void*)&done,sizeof(int),0);// envío de la variable done al cliente.
     if (r < sizeof(int))
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar done al cliente.
+        perror("\n-->error send() done: "); //Verificación de error al enviar done al cliente.
         exit(-1);
     }
 

@@ -33,17 +33,17 @@ int verificacion(int id)
 
     hash = id % 1000; // Obtencion del codigo hash utilizando el id con la operacion id % 1000.
 
-    char *dir;                // Arreglo de caracteres que contendra la direccion del archivo de la tabla hash.
-    dir = malloc(15);         // Reserva del espacio de memoria para la direccion
-    bzero(dir, 15);           // Limpieza del espacio de memoria de la direccion
-    char num[3];              // Arreglo de caracteres que contiene el codigo hash de la estructura
+    char *dir; // Arreglo de caracteres que contendra la direccion del archivo de la tabla hash.
+    dir = malloc(15); // Reserva del espacio de memoria para la direccion
+    bzero(dir, 15); // Limpieza del espacio de memoria de la direccion
+    char num[3]; // Arreglo de caracteres que contiene el codigo hash de la estructura
     strcat(dir, "./hash/");   // Concatenacion de la cadena "./hash/" a dir
     sprintf(num, "%i", hash); // Conversion del numero entero hash a arreglo de caracteres (num)
-    strcat(dir, num);         // Concatenacion del numero (num) a dir. Ahora dir contiene la direccion del archivo hash correspondiente
+    strcat(dir, num); // Concatenacion del numero (num) a dir. Ahora dir contiene la direccion del archivo hash correspondiente
 
     fp = fopen(dir, "a"); // Apertura del archivo hash "a" (para escritura al final del archivo)
-    size = ftell(fp);     // Se guarda en la variable size la posicion en Bytes del apuntador interno del archivo. Esto nos permite saber el tamaño del archivo en Bytes.
-    fclose(fp);           // Cierre del archivo
+    size = ftell(fp); // Se guarda en la variable size la posicion en Bytes del apuntador interno del archivo. Esto nos permite saber el tamaño del archivo en Bytes.
+    fclose(fp); // Cierre del archivo
 
     fp = fopen(dir, "r"); // Apertura del archivo hash "r" (para lectura).
     f = 0;
@@ -94,33 +94,28 @@ int verRegistro(int clientfd, char* ip)
     strcat(log,"Cliente "); // Une la cadena "Cliente " a lo que hay en log.
     strcat(log,ip); // Une la ip a lo que hay en log.
     strcat(log," lectura "); // Une la cadena " lectura " a lo que hay en log.
-    int size, id, v, tid, r;           // Declaracion de las variables enteras.
-    FILE *fp;                          // Inicializacion del apuntador al archivo dataDogs.dat.
+    int size, id, v, tid, r; // Declaracion de las variables enteras.
+    FILE *fp; // Inicializacion del apuntador al archivo dataDogs.dat.
     fp = fopen("./dataDogs.dat", "a"); // Apertura del archivo "a" (para escritura al final del archivo).
-    size = (int)(ftell(fp) / 100);     // Se guarda en la variable size la posicion en Bytes del apuntador interno del archivo. Esto nos permite saber el numero de estructuras almacenadas en el archivo al dividir por el tamaño de una unica estructura.
-    fclose(fp);                        // Cierre del archivo.
+    size = (int)(ftell(fp) / 100); // Se guarda en la variable size la posicion en Bytes del apuntador interno del archivo. Esto nos permite saber el numero de estructuras almacenadas en el archivo al dividir por el tamaño de una unica estructura.
+    fclose(fp); // Cierre del archivo.
 
     r = send(clientfd, (void *)&size, sizeof(int), 0); // Envía la variable size al cliente.
     if (r < sizeof(int))
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar data al cliente.
+        perror("\n-->error send() size: "); //Verificación de error al enviar data al cliente.
         exit(-1);
     }
 
     r = recv(clientfd, (void *)&id, sizeof(int), 0); // Recibe
     if (r < sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir el id enviado por el cliente.
+        perror("\n-->error recv() id: "); //Verificación de error al recibir el id enviado por el cliente.
         exit(-1);
     }
 
     v = verificacion(id); // Llamada a la función verificacion.
     r = send(clientfd, (void *)&v, sizeof(int), 0);
-    if (r < sizeof(int))
-    {
-        perror("\n-->error send() v: "); //Verificación de error al recibir el id enviado por el cliente.
-        exit(-1);
-    }
     if(!v) return -1; // verificación del error al enviar la respuesta de ejecutar la función verificación.
     
     fp = fopen("./dataDogs.dat", "r"); // Apertura del archivo dataDogs.dat "r" (para lectura)
@@ -169,7 +164,7 @@ int verRegistro(int clientfd, char* ip)
     fclose(fp); // Cierre del archivo.
 
     r = send(clientfd,(void*)&size,sizeof(int),0); // envío del tamaño del archivo al cliente.
-    if (r <  sizeof(int))
+    if (r <  sizeof(struct dogType))
     {
         perror("\n-->error send() size: "); //Verificación de error al enviar el tamaño del archivo al cliente.
         exit(-1);
@@ -184,7 +179,7 @@ int verRegistro(int clientfd, char* ip)
         r = send(clientfd,buff,size,0); // Se envía el buffer que contiene la historia, al cliente.
         if (r <  size)
         {
-            perror("\n error send() historia: "); //Verificación de error al enviar la historia, al cliente.
+            perror("\n-->error send() historia: "); //Verificación de error al enviar la historia, al cliente.
             exit(-1);
         }
         free(buff); // se libera el buffer.

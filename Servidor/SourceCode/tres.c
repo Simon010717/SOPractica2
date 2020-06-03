@@ -52,14 +52,14 @@ int eliminarRegistro(int clientfd, char* ip){
     r = send(clientfd,(void*)&total,sizeof(int),0); // Envío del total de registros al cliente.
     if (r < sizeof(int))
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar el total de registros al cliente.
+        perror("\n-->error send() total: "); //Verificación de error al enviar el total de registros al cliente.
         exit(-1);
     }
 
     r = recv(clientfd,(void*)&id,sizeof(int),0); // recepción del id enviado por el cliente.
     if (r < sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir el id enviado por el cliente.
+        perror("\n-->error recv() id: "); //Verificación de error al recibir el id enviado por el cliente.
         exit(-1);
     }
     
@@ -105,6 +105,11 @@ int eliminarRegistro(int clientfd, char* ip){
     rename("./hash/temp", dir); // Renombra el segundo archivo a el nombre de el archivo original 
     
     r = send(clientfd, (void*)&f, sizeof(int),0);
+    if (r < sizeof(int))
+    {
+        perror("\n-->error send() f: "); //Verificación de error al recibir el total de registros enviado por el servidor.
+        exit(-1);
+    }
     if(!f) { // Evalua
         return 0; // Termina la funcion
     }

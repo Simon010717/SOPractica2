@@ -30,7 +30,7 @@ int verRegistro(int clientfd)
     r = recv(clientfd, (void *)&size, sizeof(int), 0); // recepción del tamaño de la estructura enviado por el servidor.
     if (r < sizeof(int))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir el tamaño de la estructura enviado por el servidor.
+        perror("\n-->error recv() size: "); //Verificación de error al recibir el tamaño de la estructura enviado por el servidor.
         exit(-1);
     }
 

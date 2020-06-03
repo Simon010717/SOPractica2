@@ -52,7 +52,7 @@ int ingresarRegistro(int clientfd, char* ip)
    r = recv(clientfd, (void *)data, sizeof(struct dogType), 0); // Llamada a la funcion que cargara la informacion ingresada al apuntador data
    if (r < sizeof(struct dogType))
     {
-        perror("\n-->error recv() server: "); //Verificación de error al recibir data del cliente.
+        perror("\n-->error recv() struct: "); //Verificación de error al recibir data del cliente.
         exit(-1);
     }
    printw("received"); // imprime la cadena "received".
@@ -88,7 +88,7 @@ int ingresarRegistro(int clientfd, char* ip)
    r = send(clientfd, (void *)&id, sizeof(int), 0); //Envio del id resultado del ingreso del registro.
    if (r < sizeof(int))
     {
-        perror("\n-->error send() server: ");//Verificación de error al solicitar conexión con el servidor.
+        perror("\n-->error send() id: ");//Verificación de error al solicitar conexión con el servidor.
         exit(-1);
     }
    

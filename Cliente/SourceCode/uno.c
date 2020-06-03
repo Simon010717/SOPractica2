@@ -66,17 +66,17 @@ int ingresarRegistro(int clientfd){
    struct dogType *data; // Declaracion del apuntador a una estructura dogType donde se guardara la informacion ingresada
    data = malloc(sizeof(struct dogType)); // Reserva del espacio de memoria de la estuctura dogType
    
-   r = loadStruct(data); // Llamada a la funcion que cargara la informacion ingresada al apuntador data
+   loadStruct(data); // Llamada a la funcion que cargara la informacion ingresada al apuntador data
    r = send(clientfd, (void*)data, sizeof(struct dogType), 0); // envío de la estructura al servidor.
    if (r < sizeof(struct dogType))
    {
-      perror("\n-->error send() server: "); //Verificación de error al enviar la estructura al servidor.
+      perror("\n-->error send() struct: "); //Verificación de error al enviar la estructura al servidor.
       exit(-1);
    }
    r = recv(clientfd, (void *)&id, sizeof(int),0); //recepción del id enviado por el cliente.
    if (r < sizeof(int))
    {
-      perror("\n-->error recv() server: "); //Verificación de error al recibir el id enviado por el servidor.
+      perror("\n-->error recv() id: "); //Verificación de error al recibir el id enviado por el servidor.
       exit(-1);
    }
    printw("ID: %i. ",id); // Impresion del ID con el que se guardo la informacion ingresado

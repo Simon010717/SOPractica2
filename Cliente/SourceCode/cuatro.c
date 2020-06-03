@@ -35,7 +35,7 @@ int buscarRegistro(int clientfd){
     r = send(clientfd,(void*)nombre, 32, 0); // envío del nombre a buscar.
     if (r < 32)
     {
-        perror("\n-->error send() server: "); //Verificación de error al enviar el nombre a buscar.
+        perror("\n-->error send() nombre: "); //Verificación de error al enviar el nombre a buscar.
         exit(-1);
     }
 
@@ -43,6 +43,11 @@ int buscarRegistro(int clientfd){
 
     while(1){ // Iteracion sobre paquetes en el archivo hash. Todos los archivos con el mismo nombre se encuentran en el mismo archivo hash, pero dos nombres diferentes pueden tener el mismo codigo hash
         r = recv(clientfd,(void*)&tid,sizeof(int),0); // recepción del id temporal
+        if (r < sizeof(int))
+        {
+            perror("\n-->error recv() tid: "); //Verificación de error al recibir el total de registros enviado por el servidor.
+            exit(-1);
+        }
         if(tid<0) break;
         printw("- %i ",tid); // Si coinciden imprime el id leido 
     }
