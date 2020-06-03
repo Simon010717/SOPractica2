@@ -164,7 +164,7 @@ int verRegistro(int clientfd, char* ip)
     fclose(fp); // Cierre del archivo.
 
     r = send(clientfd,(void*)&size,sizeof(int),0); // envío del tamaño del archivo al cliente.
-    if (r <  sizeof(struct dogType))
+    if (r <  sizeof(int))
     {
         perror("\n-->error send() size: "); //Verificación de error al enviar el tamaño del archivo al cliente.
         exit(-1);

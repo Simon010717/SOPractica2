@@ -1,0 +1,17 @@
+2020 06 02 21:53:8 Cliente 127.0.0.1 inserción 358
+2020 06 02 21:54:30 Cliente 127.0.0.1 búsqueda juano
+2020 06 02 21:58:48 Cliente 127.0.0.1 lectura 358
+2020 06 02 21:59:33 Cliente 127.0.0.1 borrado 358
+2020 06 02 21:59:47 Cliente 127.0.0.1 inserción 486
+2020 06 02 22:0:16 Cliente 127.0.0.1 lectura 486
+2020 06 02 22:0:39 Cliente 127.0.0.1 búsqueda simon
+2020 06 02 22:0:51 Cliente 127.0.0.1 inserción 809
+2020 06 02 22:1:5 Cliente 127.0.0.1 lectura 486
+2020 06 02 22:2:7 Cliente 127.0.0.1 inserción 743
+2020 06 02 22:2:31 Cliente 127.0.0.1 lectura 743
+2020 06 02 22:2:47 Cliente 127.0.0.1 inserción 243
+2020 06 02 22:3:13 Cliente 127.0.0.1 búsqueda j
+2020 06 02 22:3:20 Cliente 127.0.0.1 lectura 743
+2020 06 02 22:3:42 Cliente 127.0.0.1 lectura 743
+2020 06 02 22:3:53 Cliente 127.0.0.1 borrado 743
+2020 06 02 22:4:8 Cliente 127.0.0.1 búsqueda j
